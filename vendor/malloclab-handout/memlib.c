@@ -97,5 +97,12 @@ size_t mem_heapsize()
  */
 size_t mem_pagesize()
 {
-    return (size_t)getpagesize();
+    long sz = -1;
+#ifdef _SC_PAGESIZE
+    sz = sysconf(_SC_PAGESIZE);
+#elif defined(_SC_PAGE_SIZE)
+    sz = sysconf(_SC_PAGE_SIZE);
+#endif
+    if (sz <= 0) sz = 4096;
+    return (size_t)sz;
 }
